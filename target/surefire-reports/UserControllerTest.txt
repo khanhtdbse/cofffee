@@ -1,0 +1,22 @@
+-------------------------------------------------------------------------------
+Test set: UserControllerTest
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 3, Errors: 0, Skipped: 0, Time elapsed: 3.483 sec <<< FAILURE! - in UserControllerTest
+test_get_by_id_success on test_get_by_id_success(UserControllerTest)(UserControllerTest)  Time elapsed: 2.497 sec  <<< FAILURE!
+java.lang.AssertionError: Status expected:<200> but was:<404>
+	at UserControllerTest.test_get_by_id_success(UserControllerTest.java:98)
+
+test_get_by_id_fail_404_not_found on test_get_by_id_fail_404_not_found(UserControllerTest)(UserControllerTest)  Time elapsed: 0.072 sec  <<< FAILURE!
+org.mockito.exceptions.verification.WantedButNotInvoked: 
+
+Wanted but not invoked:
+userService.findById(1);
+-> at UserControllerTest.test_get_by_id_fail_404_not_found(UserControllerTest.java:115)
+Actually, there were zero interactions with this mock.
+
+	at UserControllerTest.test_get_by_id_fail_404_not_found(UserControllerTest.java:115)
+
+test_get_all_success on test_get_all_success(UserControllerTest)(UserControllerTest)  Time elapsed: 0.055 sec  <<< FAILURE!
+java.lang.AssertionError: Status expected:<200> but was:<404>
+	at UserControllerTest.test_get_all_success(UserControllerTest.java:73)
+
