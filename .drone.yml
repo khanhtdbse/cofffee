@@ -6,8 +6,9 @@ build:
       - target:/opt/tomcat/webapps
     commands:
       - mvn clean site
-      - mkdir .framgia-ci-reports/unit-test/
-      - cp -r target/site/* .framgia-ci-reports/unit-test/
+      - mkdir .framgia-ci-reports
+      - mkdir .framgia-ci-reports/coverage
+      - cp -r target/site/* .framgia-ci-reports/coverage
     when:
       event: [push, tag, pull_request]
 
@@ -18,8 +19,10 @@ build:
       commands:
         - mvn clean install
         - mvn sonar:sonar -Dsonar.host.url=http://10.0.1.140:9000
-        - mkdir .framgia-ci-reports/coverage/
-        - cp -r target/site/* .framgia-ci-reports/coverage/
+        - mkdir .framgia-ci-reports
+        - mkdir .framgia-ci-reports/unit-test
+
+        - cp -r target/surefire-reports/* .framgia-ci-reports/unit-test
       when:
         event: [push, tag, pull_request]
 
