@@ -84,7 +84,7 @@ public class UserControllerTest {
             }
         });
 
-        this.mockMvc.perform(get("/"))
+        mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("users",hasSize(2)));
     }
