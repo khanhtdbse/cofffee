@@ -17,7 +17,6 @@ build:
       volumes:
         - target:/opt/tomcat/webapps
       commands:
-        - mvn clean install
         - mvn sonar:sonar -Dsonar.host.url=http://10.0.1.140:9000
         - mkdir .framgia-ci-reports
         - mkdir .framgia-ci-reports/unit-test
@@ -33,14 +32,12 @@ compose:
       - "3306"
     environment:
       MYSQL_DATABASE: coffee
-      MYSQL_USER: root
-      MYSQL_PASSWORD: tannv
       MYSQL_ROOT_PASSWORD: tannv
 
 cache:
   mount:
     - .git
-    - /drone/.m2
+    - .m2
 
 debug: true
 
