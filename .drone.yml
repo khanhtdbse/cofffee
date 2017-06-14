@@ -9,8 +9,7 @@ build:
       - mkdir .framgia-ci-reports
       - mkdir .framgia-ci-reports/coverage
       - cp -r target/site/* .framgia-ci-reports/coverage
-      - framgia-ci test-connect 127.0.0.1 3306
-      - framgia-ci run
+      - framgia-ci report
     when:
       event: [push, tag, pull_request]
 
