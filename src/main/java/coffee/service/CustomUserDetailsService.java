@@ -1,11 +1,10 @@
-package coffee.security;
+package coffee.service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import coffee.model.User;
 import coffee.model.UserProfile;
-import coffee.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

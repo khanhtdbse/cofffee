@@ -1,14 +1,24 @@
+import coffee.config.AppConfig;
 import coffee.controller.AppController;
 import coffee.model.User;
 import coffee.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Arrays;
 import java.util.List;
@@ -17,16 +27,28 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
+
+
+
 /**
  * Created by nguyen.van.tan on 6/13/17.
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = AppConfig.class)
+@WebAppConfiguration
 public class UserControllerTest {
 
     private static final int UNKNOWN_ID = Integer.MAX_VALUE;
 
     private MockMvc mockMvc;
+
+    @Autowired
+    private WebApplicationContext context;
 
     @Mock
     private UserService userService;
@@ -34,86 +56,47 @@ public class UserControllerTest {
     @InjectMocks
     private AppController appController;
 
+
     @Before
-    public void init(){
-        MockitoAnnotations.initMocks(this);
+    public void setup() {
         mockMvc = MockMvcBuilders
-                .standaloneSetup(appController)
+                .webAppContextSetup(context)
+                .defaultRequest(get("/").with(user("david").roles("ADMIN")))
+                .apply(springSecurity())
                 .build();
     }
 
-    // =========================================== Get All Users ==========================================
 
     @Test
-    public void test_get_all_success() throws Exception {
-        User  user1=new User();
-        user1.setId(1);
-        user1.setSsoId("tannv1");
-        user1.setEmail("tannv1@framgia.com");
-        user1.setFirstName("Nguyen Van Tan1");
-
-        User  user2=new User();
-        user2.setId(2);
-        user1.setSsoId("tannv2");
-        user1.setEmail("tannv2@framgia.com");
-        user1.setFirstName("Nguyen Van Tan2");
-
-        User  user3=new User();
-        user3.setId(3);
-        user1.setSsoId("tannv3");
-        user1.setEmail("tannv3@framgia.com");
-        user1.setFirstName("Nguyen Van Tan3");
-
-        List<User> users = Arrays.asList(
-                user1,user2,user3);
-
-        when(userService.findAllUsers()).thenReturn(users);
-
-        mockMvc.perform(get("/login"))
+    public void testGetSigin() throws Exception {
+        this.mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("$", hasSize(3)))
-                .andExpect(jsonPath("$[0].id", is(1)))
-                .andExpect(jsonPath("$[0].ssoId", is("tannv1")))
-                .andExpect(jsonPath("$[1].id", is(2)))
-                .andExpect(jsonPath("$[1].firstName", is("Nguyen Van Tan2")));
-
-        verify(userService, times(1)).findAllUsers();
-        verifyNoMoreInteractions(userService);
+                .andExpect(model().attribute("users",hasSize(2)));
     }
 
-    // =========================================== Get User By ID =========================================
+
+
+
 
     @Test
-    public void test_get_by_id_success() throws Exception {
+    @WithMockUser
+    public  void testCsrf() throws Exception
+    {
 
-        User  user1=new User();
-        user1.setSsoId("tannv1");
-        user1.setEmail("tannv1@framgia.com");
-        user1.setFirstName("Nguyen Van Tan1");
-
-        when(userService.findById(1)).thenReturn(user1);
-
-        mockMvc.perform(get("/users/{id}", 1))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.firstName", is("Nguyen Van Tan1")));
-
-        verify(userService, times(1)).findById(1);
-        verifyNoMoreInteractions(userService);
+        mockMvc.perform(post("/").with(csrf()));
     }
 
-    @Test
-    public void test_get_by_id_fail_404_not_found() throws Exception {
 
-        when(userService.findById(1)).thenReturn(null);
-
-        mockMvc.perform(get("/users/{id}", 1))
-                .andExpect(status().isNotFound());
-
-        verify(userService, times(1)).findById(1);
-        verifyNoMoreInteractions(userService);
+    public static RequestPostProcessor david() {
+        return user("david").password("tannv").roles("ADMIN");
     }
+
+
+//    @Test
+//    public void testUserLogin() throws Exception {
+//
+//        mockMvc.perform(post("/login").param("ssoId","david").param("password","tannv")).andExpect(status().isOk()).andExpect(cookie().exists("JSESSIONID"));
+//
+//    }
 
 }
