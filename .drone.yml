@@ -9,10 +9,16 @@ build:
       - mkdir .framgia-ci-reports
       - mkdir .framgia-ci-reports/coverage
       - cp -r target/site/* .framgia-ci-reports/coverage
-      - framgia-ci report
     when:
       event: [push, tag, pull_request]
-
+deploy:
+  ssh:
+    host: 10.0.1.139
+    user: speeda
+    port: 22
+    commands:
+      - echo hello
+      - echo world
 compose:
   database:
     image: tannv85/mysql
