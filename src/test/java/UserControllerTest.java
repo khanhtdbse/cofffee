@@ -8,6 +8,8 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -50,7 +52,7 @@ public class UserControllerTest {
     @Autowired
     private WebApplicationContext context;
 
-    @Mock
+
     private UserService userService;
 
     @InjectMocks
@@ -69,6 +71,19 @@ public class UserControllerTest {
 
     @Test
     public void testGetSigin() throws Exception {
+
+        userService =mock(UserService.class);
+        when(userService.findBySSO(anyString())).thenAnswer(new Answer<User>(){
+            @Override
+            public User answer(InvocationOnMock invocationOnMock) throws Throwable {
+                User user=new User();
+                user.setSsoId("david");
+                user.setPassword("tannv");
+
+                return user;
+            }
+        });
+
         this.mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("users",hasSize(2)));

@@ -28,14 +28,14 @@ build:
 
 compose:
   database:
-    image: mysql
+    image: tannv85/mysql
     expose:
       - "3306"
     environment:
-      MYSQL_DATABASE: demo_db
-      MYSQL_USER: demo_user
-      MYSQL_PASSWORD: demo_pw
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: coffee
+      MYSQL_USER: root
+      MYSQL_PASSWORD: tannv
+      MYSQL_ROOT_PASSWORD: tannv
 
 cache:
   mount:
@@ -43,3 +43,4 @@ cache:
     - /drone/.m2
 
 debug: true
+
