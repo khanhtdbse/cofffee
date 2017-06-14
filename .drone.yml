@@ -17,8 +17,8 @@ deploy:
     user: speeda
     port: 22
     commands:
-      - echo hello
-      - echo world
+      - scp -r target/coffee.war speeda@10.0.1.139:/home/speeda/apache-tomcat-8.0.20/webapps/
+      - pwd
 compose:
   database:
     image: tannv85/mysql
