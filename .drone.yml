@@ -12,19 +12,6 @@ build:
     when:
       event: [push, tag, pull_request]
 
-  test-intergard:
-      image: tannv85/maven3.9-jdk8
-      volumes:
-        - target:/opt/tomcat/webapps
-      commands:
-        - mvn sonar:sonar -Dsonar.host.url=http://10.0.1.140:9000
-        - mkdir .framgia-ci-reports
-        - mkdir .framgia-ci-reports/unit-test
-
-        - cp -r target/surefire-reports/* .framgia-ci-reports/unit-test
-      when:
-        event: [push, tag, pull_request]
-
 compose:
   database:
     image: tannv85/mysql
