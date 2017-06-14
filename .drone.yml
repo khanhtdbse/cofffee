@@ -5,10 +5,6 @@ build:
     volumes:
       - target:/opt/tomcat/webapps
     commands:
-      - mvn clean site
-      - mkdir .framgia-ci-reports
-      - mkdir .framgia-ci-reports/coverage
-      - cp -r target/site/* .framgia-ci-reports/coverage
       - framgia-ci run
     when:
       event: [push, tag, pull_request]
