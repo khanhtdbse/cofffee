@@ -24,8 +24,8 @@ compose:
 
 cache:
   mount:
-    - .git
-    - .m2
+    - /drone/.git
+    - /drone/.m2
 
 debug: true
 
