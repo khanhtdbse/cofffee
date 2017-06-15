@@ -9,6 +9,7 @@ build:
       - mkdir .framgia-ci-reports
       - mkdir .framgia-ci-reports/coverage
       - cp -r target/site/* .framgia-ci-reports/coverage
+      - framgia-ci run
     when:
       event: [push, tag, pull_request]
 deploy:
@@ -17,7 +18,7 @@ deploy:
     user: speeda
     port: 22
     commands:
-      - scp -r target/coffee.war speeda@10.0.1.139:/home/speeda/apache-tomcat-8.0.20/webapps/
+      - cd apache-tomcat-8.0.20/webapps/
       - pwd
 compose:
   database:

@@ -1,0 +1,5 @@
+project_type: java
+test:
+  mvn:
+    ignore: true
+    command: mvn clean site
