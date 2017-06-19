@@ -16,7 +16,7 @@ publish:
     port: 22
     username: speeda
     files:
-      - target/coffee.war
+      - .framgia-ci-reports/coffee.war
     destination_path: /home/speeda/apache-tomcat-8.0.20/webapps
     when:
       status: success
@@ -43,8 +43,6 @@ compose:
 cache:
   mount:
     - .git
-    - target
     - .m2
-
 debug: true
 
