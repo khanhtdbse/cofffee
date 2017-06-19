@@ -10,6 +10,14 @@ build:
     when:
       event: [push, tag, pull_request]
 
+deploy:
+  ssh:
+    host: 10.0.1.139
+    user: speeda
+    port: 22
+    commands:
+      - cd apache-tomcat-8.0.20/webapps/
+      - rm -rf coffee*
 publish:
   sftp:
     host: 10.0.1.139
@@ -21,16 +29,6 @@ publish:
     when:
       status: success
 
-deploy:
-  ssh:
-    host: 10.0.1.139
-    user: speeda
-    port: 22
-    commands:
-      - cd apache-tomcat-8.0.20/webapps/
-      - ../bin/catalina.sh stop
-      - ../bin/catalina.sh start
-      - ps aux | grep tomcat
 compose:
   database:
     image: tannv85/mysql
