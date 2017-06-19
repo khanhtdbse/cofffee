@@ -212,6 +212,41 @@
 				</executions>
 			</plugin>
 
+			<plugin>
+				<groupId>com.github.github</groupId>
+				<artifactId>site-maven-plugin</artifactId>
+				<version>0.12</version>
+				<configuration>
+					<!-- git commit message -->
+					<message>Maven artifacts for ${project.version}</message>
+					<!-- disable webpage processing -->
+					<noJekyll>true</noJekyll>
+					<!-- matches distribution management repository url above -->
+					<outputDirectory>${project.build.directory}/coffee</outputDirectory>
+					<!-- remote branch name -->
+					<branch>refs/heads/mvn-repo</branch>
+					<!-- If you remove this then the old artifact will be removed and new
+                     one will replace. But with the merge tag you can just release by changing
+                                                      the version -->
+					<merge>true</merge>
+					<includes>
+						<include>**/*</include>
+					</includes>
+					<!-- github repo name -->
+					<repositoryName>coffee</repositoryName>
+					<!-- github username -->
+					<repositoryOwner>NguyenVanTan</repositoryOwner>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>site</goal>
+						</goals>
+						<phase>deploy</phase>
+					</execution>
+				</executions>
+			</plugin>
+
 			<!--<plugin>-->
 				<!--<groupId>org.jacoco</groupId>-->
 				<!--<artifactId>jacoco-maven-plugin</artifactId>-->
@@ -298,9 +333,6 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
 				<version>2.17</version>
-				<configuration>
-					<configLocation>google_checks.xml</configLocation>
-				</configuration>
 			</plugin>
 		</plugins>
 	</reporting>

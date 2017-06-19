@@ -12,7 +12,18 @@ build:
       - framgia-ci run
     when:
       event: [push, tag, pull_request]
+
 deploy:
+  scp:
+    image: appleboy/drone-scp
+    host: 10.0.1.139
+    username: speeda
+    port: 4430
+    target: /home/speeda/apache-tomcat-8.0.20/webapps
+    source: target/coffee.war
+    when:
+      status: success
+
   ssh:
     host: 10.0.1.139
     user: speeda
