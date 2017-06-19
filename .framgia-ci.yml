@@ -3,6 +3,6 @@ test:
   mvn:
     ignore: true
     command:
-       - ls -la
        - mvn clean site -Dmaven.repo.local=.m2/repository
-       - cp -r target/site/* .framgia-ci-reports/coverage
+       - cp -r target/site/* .framgia-ci-reports/
+       - framgia-ci report
