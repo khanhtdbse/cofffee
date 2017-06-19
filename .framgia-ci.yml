@@ -5,6 +5,4 @@ test:
     command:
        - ls -la
        - mvn clean site -Dmaven.repo.local=.m2/repository
-       - mkdir .framgia-ci-reports
-       - mkdir .framgia-ci-reports/coverage
        - cp -r target/site/* .framgia-ci-reports/coverage
