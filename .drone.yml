@@ -5,8 +5,8 @@ build:
     volumes:
       - target:/opt/tomcat/webapps
     commands:
-      - mvn help:evaluate -Dexpression=settings.localRepository | grep -v '\[INFO\]'
-      - mvn clean install -Dmaven.repo.local=$HOME/.m2/repository
+      - framgia-ci run
+
     when:
       event: [push, tag, pull_request]
 
@@ -28,8 +28,9 @@ deploy:
     port: 22
     commands:
       - cd apache-tomcat-8.0.20/webapps/
-      - pwd
-
+      - ../bin/catalina.sh stop
+      - ../bin/catalina.sh start
+      - ps aux | grep tomcat
 compose:
   database:
     image: tannv85/mysql
@@ -43,7 +44,7 @@ cache:
   mount:
     - .git
     - target
-    - /drone/.m2
-    - /root/.m2
+    - .m2
+
 debug: true
 

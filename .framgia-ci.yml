@@ -2,4 +2,9 @@ project_type: java
 test:
   mvn:
     ignore: true
-    command: mvn clean site
+    command:
+       - mvn help:evaluate -Dexpression=settings.localRepository | grep -v '\[INFO\]'
+       - mvn clean site -Dmaven.repo.local=.m2/repository
+       - mkdir .framgia-ci-reports
+       - mkdir .framgia-ci-reports/coverage
+       - cp -r target/site/* .framgia-ci-reports/coverage
