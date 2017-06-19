@@ -6,7 +6,7 @@ build:
       - target:/opt/tomcat/webapps
     commands:
       - mvn help:evaluate -Dexpression=settings.localRepository | grep -v '\[INFO\]'
-      - mvn clean site
+      - mvn clean site -Dmaven.repo.local=$HOME/.m2/repository
       - mkdir .framgia-ci-reports
       - mkdir .framgia-ci-reports/coverage
       - cp -r target/site/* .framgia-ci-reports/coverage
