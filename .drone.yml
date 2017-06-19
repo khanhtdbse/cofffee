@@ -5,6 +5,7 @@ build:
     volumes:
       - target:/opt/tomcat/webapps
     commands:
+      - mvn help:evaluate -Dexpression=settings.localRepository | grep -v '\[INFO\]'
       - mvn clean site
       - mkdir .framgia-ci-reports
       - mkdir .framgia-ci-reports/coverage
