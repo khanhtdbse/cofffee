@@ -10,7 +10,7 @@ build:
     when:
       event: [push, tag, pull_request]
 
-deploy:
+publish:
   ssh:
     host: 10.0.1.139
     user: speeda
@@ -18,7 +18,6 @@ deploy:
     commands:
       - cd apache-tomcat-8.0.20/webapps/
       - rm -rf coffee*
-publish:
   sftp:
     host: 10.0.1.139
     port: 22
