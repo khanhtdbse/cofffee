@@ -3,7 +3,7 @@ test:
   mvn:
     ignore: true
     command:
-       - mvn help:evaluate -Dexpression=settings.localRepository | grep -v '\[INFO\]'
+       - ls -la
        - mvn clean site -Dmaven.repo.local=.m2/repository
        - mkdir .framgia-ci-reports
        - mkdir .framgia-ci-reports/coverage
