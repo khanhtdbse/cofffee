@@ -1,8 +1,11 @@
 project_type: java
+
+# Remove this for real product
+url: http://smartstudy.edu.vn:8000
+
 test:
   mvn:
     ignore: true
     command:
-       - mvn clean install site -Dmaven.repo.local=.m2/repository
-       - cp -r target/site/* .framgia-ci-reports/
-       - framgia-ci report
+       - mvn site
+       - mv target/site .framgia-ci-reports/maven
