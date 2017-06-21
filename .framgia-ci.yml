@@ -1,8 +1,5 @@
 project_type: java
 
-# Remove this for real product
-url: http://smartstudy.edu.vn:8000
-
 test:
   mvn:
     ignore: true
