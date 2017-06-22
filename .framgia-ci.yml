@@ -4,5 +4,4 @@ test:
     ignore: true
     command:
        - mvn clean install site -Dmaven.repo.local=.m2/repository
-       - cp -r target/site/* .framgia-ci-reports/
-       - framgia-ci report
+       - cp -r target/site/* .framgia-ci-reports/maven
