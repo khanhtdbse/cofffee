@@ -1,39 +1,34 @@
 import coffee.config.AppConfig;
-import coffee.controller.AppController;
+import coffee.config.TestConfig;
 import coffee.model.User;
 import coffee.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 
@@ -41,7 +36,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
  * Created by nguyen.van.tan on 6/13/17.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = AppConfig.class)
+@ContextConfiguration(classes = {TestConfig.class,AppConfig.class})
 @WebAppConfiguration
 public class UserControllerTest {
 
@@ -52,15 +47,13 @@ public class UserControllerTest {
     @Autowired
     private WebApplicationContext context;
 
-
+    @Autowired
     private UserService userService;
-
-    @InjectMocks
-    private AppController appController;
 
 
     @Before
     public void setup() {
+
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(context)
                 .defaultRequest(get("/").with(user("david").roles("ADMIN")))
@@ -72,7 +65,6 @@ public class UserControllerTest {
     @Test
     public void testGetSigin() throws Exception {
 
-        userService =mock(UserService.class);
         when(userService.findBySSO(anyString())).thenAnswer(new Answer<User>(){
             @Override
             public User answer(InvocationOnMock invocationOnMock) throws Throwable {
@@ -81,6 +73,24 @@ public class UserControllerTest {
                 user.setPassword("tannv");
 
                 return user;
+            }
+        });
+
+        when(userService.findAllUsers()).thenAnswer(new Answer<List<User>>() {
+
+            @Override
+            public List<User> answer(InvocationOnMock invocationOnMock) throws Throwable {
+                List<User> users =new ArrayList<>();
+                User user=new User();
+                user.setSsoId("david");
+                user.setPassword("tannv");
+                users.add(user);
+
+                User user1=new User();
+                user.setSsoId("david1");
+                user.setPassword("tannv1");
+                users.add(user1);
+                return users;
             }
         });
 

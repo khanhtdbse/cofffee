@@ -4,5 +4,5 @@ test:
   mvn:
     ignore: true
     command:
-       - mvn site
+       - mvn clean install site -Dmaven.repo.local=.m2/repository
        - mv target/site .framgia-ci-reports/maven
